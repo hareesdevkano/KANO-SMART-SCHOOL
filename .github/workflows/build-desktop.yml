@@ -1,0 +1,104 @@
+name: Build Desktop & Mobile Apps
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build web app
+        run: npm run build
+
+      - name: Install Electron 22 (Windows 7/8/10/11 support)
+        run: npm install --save-dev electron@22.3.27 electron-builder@24.13.3
+
+      - name: Build Windows installer
+        run: npx electron-builder --win --config electron/package.json
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmartSchool-CBT-Windows
+          path: dist-electron/*.exe
+
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build web app
+        run: npm run build
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Capacitor
+        run: |
+          npm install @capacitor/core @capacitor/cli
+          npx cap init SmartSchoolCBT com.smartschool.cbt --web-dir dist
+          npm install @capacitor/android
+          npx cap add android
+
+      - name: Build Android APK
+        run: |
+          npx cap sync android
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload Android artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmartSchool-CBT-Android
+          path: android/app/build/outputs/apk/debug/*.apk
+
+  create-release:
+    needs: [build-windows, build-android]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: SmartSchool-CBT-Windows
+          path: ./release
+
+      - name: Download Android artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: SmartSchool-CBT-Android
+          path: ./release
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./release/*
+          generate_release_notes: true

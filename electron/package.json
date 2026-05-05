@@ -1,0 +1,57 @@
+{
+  "name": "smartschool-cbt",
+  "version": "1.1.0",
+  "description": "SmartSchool CBT Exam Portal - Desktop Application (Offline-Ready)",
+  "main": "electron/main.cjs",
+  "author": "Dual Intelligence ICT Services Kano",
+  "license": "MIT",
+  "scripts": {
+    "electron:dev": "electron .",
+    "electron:build:win": "electron-builder --win",
+    "electron:build:linux": "electron-builder --linux",
+    "electron:build:mac": "electron-builder --mac"
+  },
+  "build": {
+    "appId": "com.smartschool.cbt",
+    "productName": "SmartSchool CBT",
+    "copyright": "Copyright © 2026 Dual Intelligence ICT Services Kano",
+    "files": [
+      "electron/**/*"
+    ],
+    "directories": {
+      "output": "dist-electron"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        }
+      ],
+      "icon": "electron/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": false,
+      "installerIcon": "electron/icon.png",
+      "uninstallerIcon": "electron/icon.png",
+      "installerHeaderIcon": "electron/icon.png",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "SmartSchool CBT"
+    },
+    "linux": {
+      "target": ["AppImage"],
+      "icon": "electron/icon.png"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "electron/icon.png"
+    }
+  },
+  "devDependencies": {
+    "electron": "22.3.27",
+    "electron-builder": "^24.13.3"
+  }
+}
