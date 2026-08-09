@@ -43,23 +43,30 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const fetchUserData = async (userId: string) => {
     try {
-      const { data: roles } = await supabase
+      const { data: roles, error: rolesError } = await supabase
         .from("user_roles")
         .select("role, school_id")
         .eq("user_id", userId)
         .limit(1);
 
+      if (rolesError) throw rolesError;
+
       if (roles && roles.length > 0) {
         setRole(roles[0].role as UserRole);
         setSchoolId(roles[0].school_id);
+      } else {
+        setRole(null);
+        setSchoolId(null);
       }
 
       if (!roles || roles.length === 0 || !roles[0].school_id) {
-        const { data: profile } = await supabase
+        const { data: profile, error: profileError } = await supabase
           .from("profiles")
           .select("school_id")
           .eq("id", userId)
           .single();
+
+        if (profileError && profileError.code !== "PGRST116") throw profileError;
 
         if (profile?.school_id) {
           setSchoolId(profile.school_id);
@@ -81,10 +88,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setUser(session?.user ?? null);
 
         if (session?.user) {
-          fetchUserData(session.user.id);
+          setLoading(true);
+          void fetchUserData(session.user.id).finally(() => {
+            if (isMounted) setLoading(false);
+          });
         } else {
           setRole(null);
           setSchoolId(null);
+          setLoading(false);
         }
       }
     );

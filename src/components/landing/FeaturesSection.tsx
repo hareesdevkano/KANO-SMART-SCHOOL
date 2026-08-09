@@ -31,68 +31,48 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <section id="features" className="py-28 lg:py-36 bg-luxury-navy-deep relative overflow-hidden">
-      <div
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, hsl(43 64% 52%) 1px, transparent 0)`,
-          backgroundSize: "48px 48px",
-        }}
-      />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-luxury-teal/5 rounded-full blur-[180px]" />
-
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center max-w-2xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-2 mb-5">
-            <div className="w-8 h-px bg-luxury-gold" />
-            <span className="text-[11px] uppercase tracking-[0.3em] text-luxury-gold font-semibold">
+    <section id="features" className="py-24 lg:py-32 bg-luxury-cream border-t border-luxury-emerald/10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="flex items-baseline justify-between border-b border-luxury-emerald/10 pb-6 mb-14">
+          <div>
+            <span className="uppercase tracking-[0.3em] text-xs font-semibold text-luxury-gold block mb-3">
               Platform Capabilities
             </span>
-            <div className="w-8 h-px bg-luxury-gold" />
+            <h2 className="font-display text-3xl md:text-5xl italic text-luxury-emerald leading-[0.95]">
+              Every tool your school needs.
+            </h2>
           </div>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-white mb-5 leading-[1.05]">
-            Every tool your school needs,
-            <br />
-            <span className="italic text-gold-gradient">refined for excellence</span>.
-          </h2>
-          <p className="text-lg text-white/50 max-w-xl mx-auto font-light leading-relaxed">
-            A unified platform covering academics, administration, finance, and communication.
-          </p>
+          <span className="hidden md:block text-xs uppercase tracking-widest text-luxury-emerald/50">
+            Twelve modules
+          </span>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.05] rounded-3xl overflow-hidden border border-white/[0.06]">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <div
               key={index}
-              className={`group relative p-8 transition-all duration-500 ${
+              className={`group relative p-8 rounded-none border transition-all duration-300 hover:shadow-xl ${
                 feature.featured
-                  ? "bg-gradient-to-br from-luxury-teal/[0.08] to-luxury-surface"
-                  : "bg-luxury-navy hover:bg-luxury-surface/60"
+                  ? "bg-luxury-navy-deep text-luxury-cream border-luxury-gold/20"
+                  : "bg-white border-luxury-emerald/10 hover:border-luxury-gold/40"
               }`}
             >
+              <div className={`absolute inset-x-0 top-0 h-1 ${feature.featured ? "bg-luxury-gold" : "bg-transparent group-hover:bg-luxury-gold/50"} transition-colors`} />
               {feature.featured && (
-                <div className="absolute top-5 right-5">
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-luxury-gold bg-luxury-gold/10 px-2.5 py-1 rounded-full border border-luxury-gold/30">
-                    Signature
-                  </span>
-                </div>
+                <span className="absolute top-5 right-5 text-[9px] font-bold uppercase tracking-wider text-luxury-gold">
+                  Signature
+                </span>
               )}
 
-              <div
-                className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-all duration-500 group-hover:scale-110 ${
-                  feature.featured
-                    ? "bg-luxury-gold text-luxury-navy-deep shadow-gold-glow"
-                    : "bg-white/[0.04] text-luxury-gold border border-luxury-gold/20 group-hover:border-luxury-gold/50"
-                }`}
-              >
-                <feature.icon className="w-5 h-5" />
-              </div>
+              <feature.icon className={`w-7 h-7 mb-6 ${feature.featured ? "text-luxury-gold" : "text-luxury-emerald"}`} />
 
-              <h3 className="font-display text-lg font-bold text-white mb-2 flex items-center gap-2">
+              <h3 className={`font-display text-2xl italic mb-3 flex items-center gap-2 ${feature.featured ? "text-luxury-cream" : "text-luxury-emerald"}`}>
                 {feature.title}
-                <ArrowUpRight className="w-4 h-4 text-luxury-gold/40 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
+                <ArrowUpRight className={`w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all ${feature.featured ? "text-luxury-gold" : "text-luxury-gold"}`} />
               </h3>
-              <p className="text-sm text-white/50 leading-relaxed">{feature.description}</p>
+              <p className={`text-sm leading-relaxed ${feature.featured ? "text-luxury-cream/70" : "text-luxury-emerald/70"}`}>
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>

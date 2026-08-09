@@ -37,7 +37,7 @@ const SchoolAdminDashboard = () => {
 
   if (schoolLoading || statsLoading) {
     return (
-      <DashboardLayout role="school-admin">
+      <DashboardLayout role="school_admin">
         <Skeleton className="h-40 rounded-2xl mb-8" />
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-32 rounded-2xl" />)}
@@ -47,7 +47,7 @@ const SchoolAdminDashboard = () => {
   }
 
   return (
-    <DashboardLayout role="school-admin">
+    <DashboardLayout role="school_admin">
       {/* Welcome Banner */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-info/80 via-primary to-primary/90 p-8 mb-8">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIxIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PC9zdmc+')] opacity-40" />

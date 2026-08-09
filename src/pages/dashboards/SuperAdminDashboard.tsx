@@ -61,7 +61,7 @@ const SuperAdminDashboard = () => {
 
   if (statsLoading) {
     return (
-      <DashboardLayout role="super-admin">
+      <DashboardLayout role="super_admin">
         <div className="flex items-center justify-center py-24">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary" />
         </div>
@@ -70,7 +70,7 @@ const SuperAdminDashboard = () => {
   }
 
   return (
-    <DashboardLayout role="super-admin">
+    <DashboardLayout role="super_admin">
       {/* Welcome Banner */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-hero p-8 mb-8">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIxIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PC9zdmc+')] opacity-40" />

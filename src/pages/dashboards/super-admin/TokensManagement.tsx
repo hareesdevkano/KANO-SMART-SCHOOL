@@ -168,7 +168,7 @@ const TokensManagement = () => {
     new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", minimumFractionDigits: 0 }).format(amount);
 
   return (
-    <DashboardLayout role="super-admin">
+    <DashboardLayout role="super_admin">
       <div className="space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

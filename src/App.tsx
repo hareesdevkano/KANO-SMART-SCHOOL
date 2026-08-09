@@ -7,15 +7,19 @@ import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Register from "./pages/Register";
 import SuperAdminDashboard from "./pages/dashboards/SuperAdminDashboard";
 import SchoolsManagement from "./pages/dashboards/super-admin/SchoolsManagement";
 import SubscriptionsManagement from "./pages/dashboards/super-admin/SubscriptionsManagement";
 import UsersManagement from "./pages/dashboards/super-admin/UsersManagement";
 import AnalyticsDashboard from "./pages/dashboards/super-admin/AnalyticsDashboard";
+import SuperAdminSettings from "./pages/dashboards/super-admin/Settings";
 
 import TokensManagement from "./pages/dashboards/super-admin/TokensManagement";
 import StudentTokensManagement from "./pages/dashboards/super-admin/StudentTokensManagement";
+import SchoolResultsDownload from "./pages/dashboards/super-admin/SchoolResultsDownload";
 import SchoolAdminDashboard from "./pages/dashboards/SchoolAdminDashboard";
 import StudentsManagement from "./pages/dashboards/school-admin/StudentsManagement";
 import TeachersManagement from "./pages/dashboards/school-admin/TeachersManagement";
@@ -47,8 +51,9 @@ import ChildAcademics from "./pages/dashboards/parent/ChildAcademics";
 import ChildAttendance from "./pages/dashboards/parent/ChildAttendance";
 import ChildMemorization from "./pages/dashboards/parent/ChildMemorization";
 import ChildFees from "./pages/dashboards/parent/ChildFees";
-import DownloadPage from "./pages/Download";
 import StudentRegistration from "./pages/StudentRegistration";
+import Demo from "./pages/Demo";
+import SchoolsDirectory from "./pages/SchoolsDirectory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -63,7 +68,12 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/demo" element={<Demo />} />
+            <Route path="/schools" element={<SchoolsDirectory />} />
+            
             
             {/* Super Admin Routes */}
             <Route path="/super-admin" element={<ProtectedRoute allowedRoles={["super_admin"]}><SuperAdminDashboard /></ProtectedRoute>} />
@@ -71,9 +81,12 @@ const App = () => (
             <Route path="/super-admin/subscriptions" element={<ProtectedRoute allowedRoles={["super_admin"]}><SubscriptionsManagement /></ProtectedRoute>} />
             <Route path="/super-admin/users" element={<ProtectedRoute allowedRoles={["super_admin"]}><UsersManagement /></ProtectedRoute>} />
             <Route path="/super-admin/analytics" element={<ProtectedRoute allowedRoles={["super_admin"]}><AnalyticsDashboard /></ProtectedRoute>} />
+            <Route path="/super-admin/settings" element={<ProtectedRoute allowedRoles={["super_admin"]}><SuperAdminSettings /></ProtectedRoute>} />
             
             <Route path="/super-admin/tokens" element={<ProtectedRoute allowedRoles={["super_admin"]}><TokensManagement /></ProtectedRoute>} />
             <Route path="/super-admin/student-tokens" element={<ProtectedRoute allowedRoles={["super_admin"]}><StudentTokensManagement /></ProtectedRoute>} />
+            <Route path="/super-admin/results-download" element={<ProtectedRoute allowedRoles={["super_admin"]}><SchoolResultsDownload /></ProtectedRoute>} />
+            <Route path="/super-admin/results" element={<ProtectedRoute allowedRoles={["super_admin"]}><SchoolResultsDownload /></ProtectedRoute>} />
             
             {/* School Admin Routes */}
             <Route path="/school-admin" element={<ProtectedRoute allowedRoles={["school_admin"]}><SchoolAdminDashboard /></ProtectedRoute>} />
@@ -115,7 +128,6 @@ const App = () => (
             <Route path="/parent/memorization" element={<ProtectedRoute allowedRoles={["parent"]}><ChildMemorization /></ProtectedRoute>} />
             <Route path="/parent/fees" element={<ProtectedRoute allowedRoles={["parent"]}><ChildFees /></ProtectedRoute>} />
             
-            <Route path="/download" element={<DownloadPage />} />
             <Route path="/student-registration" element={<StudentRegistration />} />
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

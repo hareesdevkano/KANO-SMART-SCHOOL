@@ -1313,6 +1313,7 @@ export type Database = {
           class_id: string | null
           created_at: string | null
           date_of_birth: string | null
+          full_name: string | null
           gender: string | null
           guardian_email: string | null
           guardian_name: string | null
@@ -1329,6 +1330,7 @@ export type Database = {
           class_id?: string | null
           created_at?: string | null
           date_of_birth?: string | null
+          full_name?: string | null
           gender?: string | null
           guardian_email?: string | null
           guardian_name?: string | null
@@ -1345,6 +1347,7 @@ export type Database = {
           class_id?: string | null
           created_at?: string | null
           date_of_birth?: string | null
+          full_name?: string | null
           gender?: string | null
           guardian_email?: string | null
           guardian_name?: string | null

@@ -9,49 +9,35 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-28 lg:py-36 bg-luxury-navy relative overflow-hidden">
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-luxury-gold/5 rounded-full blur-[160px]" />
-
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center max-w-2xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-2 mb-5">
-            <div className="w-8 h-px bg-luxury-gold" />
-            <span className="text-[11px] uppercase tracking-[0.3em] text-luxury-gold font-semibold">
+    <section className="py-24 lg:py-32 bg-luxury-cream border-t border-luxury-emerald/10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="flex items-baseline justify-between border-b border-luxury-emerald/10 pb-6 mb-16">
+          <div>
+            <span className="uppercase tracking-[0.3em] text-xs font-semibold text-luxury-gold block mb-3">
               The Process
             </span>
-            <div className="w-8 h-px bg-luxury-gold" />
+            <h2 className="font-display text-3xl md:text-5xl italic text-luxury-emerald leading-[0.95]">
+              Up and running in four steps.
+            </h2>
           </div>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-white mb-5 leading-[1.05]">
-            Up and running in <span className="italic text-gold-gradient">four steps</span>.
-          </h2>
-          <p className="text-lg text-white/50 font-light">
-            A straightforward onboarding designed for schools of all sizes.
-          </p>
+          <span className="hidden md:block text-xs uppercase tracking-widest text-luxury-emerald/50">
+            24-hour onboarding
+          </span>
         </div>
 
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-10 relative">
-            {/* Connecting gold line */}
-            <div className="hidden md:block absolute top-14 left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-transparent via-luxury-gold/40 to-transparent" />
-
-            {steps.map((step, index) => (
-              <div key={index} className="relative text-center group">
-                <div className="relative inline-flex mb-7">
-                  <div className="w-28 h-28 rounded-full bg-luxury-surface border-2 border-luxury-gold/20 flex items-center justify-center group-hover:border-luxury-gold/60 transition-all duration-500 group-hover:-translate-y-1 shadow-luxury">
-                    <step.icon className="w-10 h-10 text-luxury-gold" />
-                  </div>
-                  <span className="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-luxury-gold text-luxury-navy-deep font-display text-base font-bold flex items-center justify-center shadow-gold-glow border-4 border-luxury-navy">
-                    {index + 1}
-                  </span>
-                </div>
-
-                <h3 className="font-display text-xl font-bold text-white mb-2.5">{step.title}</h3>
-                <p className="text-sm text-white/50 leading-relaxed max-w-[240px] mx-auto">
-                  {step.description}
-                </p>
+        <div className="grid md:grid-cols-4 gap-0 md:divide-x divide-luxury-emerald/10">
+          {steps.map((step, index) => (
+            <div key={index} className="relative px-8 py-10 group">
+              <div className="flex items-baseline gap-4 mb-6">
+                <span className="font-display text-6xl italic text-luxury-gold leading-none">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <step.icon className="w-6 h-6 text-luxury-emerald" />
               </div>
-            ))}
-          </div>
+              <h3 className="font-display text-2xl italic text-luxury-emerald mb-3">{step.title}</h3>
+              <p className="text-sm text-luxury-emerald/70 leading-relaxed">{step.description}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

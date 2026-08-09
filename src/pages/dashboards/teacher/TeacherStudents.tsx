@@ -35,6 +35,7 @@ import {
   useTeacherClasses,
   useEnrollStudent,
 } from "@/hooks/useTeacherData";
+import BulkStudentUpload from "@/components/students/BulkStudentUpload";
 import { Search, UserPlus, Users, Filter } from "lucide-react";
 
 const TeacherStudents = () => {
@@ -114,6 +115,10 @@ const TeacherStudents = () => {
               Enroll and manage students in your classes
             </p>
           </div>
+          <BulkStudentUpload
+            classes={(classes ?? []).map((cls) => ({ id: cls.id, name: cls.name }))}
+            invalidateKeys={["all-students"]}
+          />
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button>
@@ -299,6 +304,7 @@ const TeacherStudents = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Reg. Number</TableHead>
+                      <TableHead>Name</TableHead>
                       <TableHead>Class</TableHead>
                       <TableHead>Gender</TableHead>
                       <TableHead>Guardian</TableHead>
@@ -312,6 +318,7 @@ const TeacherStudents = () => {
                         <TableCell className="font-medium">
                           {student.registration_number || "-"}
                         </TableCell>
+                        <TableCell>{student.full_name || "-"}</TableCell>
                         <TableCell>
                           <Badge variant="outline">
                             {student.classes?.name || "Unassigned"}

@@ -11,49 +11,47 @@ const TestimonialsSection = () => {
   ];
 
   return (
-    <section id="testimonials" className="py-28 lg:py-36 bg-luxury-navy relative overflow-hidden">
-      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-luxury-gold/5 rounded-full blur-[200px]" />
-      <div className="absolute bottom-1/4 left-0 w-[400px] h-[400px] bg-luxury-teal/5 rounded-full blur-[150px]" />
-
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center max-w-2xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-2 mb-5">
-            <div className="w-8 h-px bg-luxury-gold" />
-            <span className="text-[11px] uppercase tracking-[0.3em] text-luxury-gold font-semibold">
+    <section id="testimonials" className="py-24 lg:py-32 bg-luxury-cream border-t border-luxury-emerald/10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="flex items-baseline justify-between border-b border-luxury-emerald/10 pb-6 mb-14">
+          <div>
+            <span className="uppercase tracking-[0.3em] text-xs font-semibold text-luxury-gold block mb-3">
               In Their Words
             </span>
-            <div className="w-8 h-px bg-luxury-gold" />
+            <h2 className="font-display text-3xl md:text-5xl italic text-luxury-emerald leading-[0.95]">
+              Loved by educators nationwide.
+            </h2>
           </div>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-white mb-5 leading-[1.05]">
-            Loved by educators <span className="italic text-gold-gradient">nationwide</span>.
-          </h2>
+          <span className="hidden md:block text-xs uppercase tracking-widest text-luxury-emerald/50">
+            500+ institutions
+          </span>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((t, index) => (
             <div
               key={index}
-              className="group relative p-8 rounded-2xl bg-luxury-surface/60 border border-white/[0.06] hover:border-luxury-gold/30 transition-all duration-500 hover:-translate-y-1 backdrop-blur-sm"
+              className="group relative p-8 bg-white border border-luxury-emerald/10 rounded-none hover:border-luxury-gold/40 hover:shadow-xl transition-all duration-300"
             >
-              <Quote className="absolute top-6 right-6 w-10 h-10 text-luxury-gold/15 group-hover:text-luxury-gold/30 transition-colors duration-500" />
+              <Quote className="absolute top-6 right-6 w-10 h-10 text-luxury-gold/20" />
 
-              <div className="flex gap-1 mb-5">
+              <div className="flex gap-0.5 mb-5">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} className="w-4 h-4 text-luxury-gold fill-luxury-gold" />
                 ))}
               </div>
 
-              <p className="text-white/65 text-sm leading-[1.85] mb-7 relative z-10 font-light italic">
+              <p className="font-display text-lg italic text-luxury-emerald leading-relaxed mb-7">
                 "{t.content}"
               </p>
 
-              <div className="flex items-center gap-3.5 pt-5 border-t border-white/[0.06]">
-                <div className="w-11 h-11 rounded-full bg-luxury-teal flex items-center justify-center text-white text-sm font-bold border-2 border-luxury-gold/30">
+              <div className="flex items-center gap-3.5 pt-5 border-t border-luxury-emerald/10">
+                <div className="w-11 h-11 rounded-none bg-luxury-emerald flex items-center justify-center text-luxury-cream text-sm font-bold border border-luxury-gold/40">
                   {t.initials}
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-white font-display">{t.name}</p>
-                  <p className="text-xs text-white/40">{t.role} · {t.location}</p>
+                  <p className="text-sm font-bold text-luxury-emerald font-display">{t.name}</p>
+                  <p className="text-xs text-luxury-emerald/50 mt-0.5">{t.role} · {t.location}</p>
                 </div>
               </div>
             </div>

@@ -73,7 +73,7 @@ const RegistrationLinks = () => {
   const unusedTokens = totalTokens - usedTokens;
 
   return (
-    <DashboardLayout role="school-admin">
+    <DashboardLayout role="school_admin">
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">

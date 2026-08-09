@@ -32,14 +32,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import NotificationsPopover from "@/components/dashboard/NotificationsPopover";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
-  role: "super-admin" | "school-admin" | "teacher" | "student" | "parent";
+  role: "super_admin" | "school_admin" | "teacher" | "student" | "parent";
 }
 
 const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
@@ -77,23 +76,23 @@ const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
   if (!user) return null;
 
   const roleLabels = {
-    "super-admin": "Super Admin",
-    "school-admin": "School Admin",
+    "super_admin": "Super Admin",
+    "school_admin": "School Admin",
     teacher: "Teacher",
     student: "Student",
     parent: "Parent",
   };
 
   const roleColors = {
-    "super-admin": "from-primary to-primary-light",
-    "school-admin": "from-info to-primary",
+    "super_admin": "from-primary to-primary-light",
+    "school_admin": "from-info to-primary",
     teacher: "from-success to-primary",
     student: "from-primary to-info",
     parent: "from-warning to-secondary",
   };
 
   const navigationItems = {
-    "super-admin": [
+    "super_admin": [
       { icon: Home, label: "Dashboard", href: "/super-admin" },
       { icon: Building2, label: "Schools", href: "/super-admin/schools" },
       { icon: Users, label: "Users", href: "/super-admin/users" },
@@ -101,10 +100,11 @@ const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
       
       { icon: Key, label: "Result Tokens", href: "/super-admin/tokens" },
       { icon: UserPlus, label: "Student Tokens", href: "/super-admin/student-tokens" },
+      { icon: FileText, label: "Results Download", href: "/super-admin/results-download" },
       { icon: TrendingUp, label: "Analytics", href: "/super-admin/analytics" },
       { icon: Settings, label: "Settings", href: "/super-admin/settings" },
     ],
-    "school-admin": [
+    "school_admin": [
       { icon: Home, label: "Dashboard", href: "/school-admin" },
       { icon: Users, label: "Students", href: "/school-admin/students" },
       { icon: Users, label: "Teachers", href: "/school-admin/teachers" },
@@ -280,15 +280,6 @@ const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-52 rounded-xl p-1.5">
-                  <DropdownMenuItem className="rounded-lg">
-                    <User className="w-4 h-4 mr-2" />
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="rounded-lg">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
                   <DropdownMenuItem className="text-destructive rounded-lg" onClick={handleLogout}>
                     <LogOut className="w-4 h-4 mr-2" />
                     Logout

@@ -37,8 +37,54 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { Search, Plus, Trash2, Users, Filter } from "lucide-react";
 import InviteParentDialog from "@/components/school-admin/InviteParentDialog";
+import BulkStudentUpload from "@/components/students/BulkStudentUpload";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { z } from "zod";
+
+const optionalText = (max: number) =>
+  z.string().trim().max(max, `Value must be under ${max} characters`).optional().or(z.literal(""));
+
+const studentSchema = z.object({
+  full_name: z
+    .string()
+    .trim()
+    .min(2, "Student full name must be at least 2 characters")
+    .max(120, "Student full name must be under 120 characters"),
+  registration_number: z
+    .string()
+    .trim()
+    .min(3, "Registration number must be at least 3 characters")
+    .max(50, "Registration number must be under 50 characters")
+    .regex(/^[A-Za-z0-9/_-]+$/, "Registration number may only contain letters, numbers, - / and _"),
+  class_id: z.string().optional().or(z.literal("")),
+  guardian_name: optionalText(120),
+  guardian_phone: z
+    .string()
+    .trim()
+    .regex(/^\+?[0-9\s()-]{7,20}$/, "Enter a valid guardian phone number")
+    .optional()
+    .or(z.literal("")),
+  guardian_email: z
+    .string()
+    .trim()
+    .email("Enter a valid guardian email address")
+    .max(255, "Email must be under 255 characters")
+    .optional()
+    .or(z.literal("")),
+  gender: z.enum(["male", "female"]).optional().or(z.literal("")),
+  date_of_birth: z
+    .string()
+    .optional()
+    .or(z.literal(""))
+    .refine((value) => {
+      if (!value) return true;
+      const dob = new Date(value);
+      return !Number.isNaN(dob.getTime()) && dob < new Date() && dob > new Date("1900-01-01");
+    }, "Enter a realistic date of birth"),
+  address: optionalText(300),
+});
+
 
 const StudentsManagement = () => {
   const { data: students, isLoading } = useSchoolStudents();
@@ -71,10 +117,13 @@ const StudentsManagement = () => {
   });
 
   const handleAddStudent = async () => {
-    if (!newStudent.registration_number || !newStudent.full_name) {
-      toast.error("Registration number and full name are required");
+    const parsed = studentSchema.safeParse(newStudent);
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message || "Please check the form values");
       return;
     }
+
+
 
     setIsSubmitting(true);
     try {
@@ -129,7 +178,7 @@ const StudentsManagement = () => {
   };
 
   return (
-    <DashboardLayout role="school-admin">
+    <DashboardLayout role="school_admin">
       <div className="space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -139,6 +188,7 @@ const StudentsManagement = () => {
               Manage all students in your school
             </p>
           </div>
+          <BulkStudentUpload classes={classes ?? []} invalidateKeys={["school-students"]} />
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button>
@@ -347,7 +397,7 @@ const StudentsManagement = () => {
                           {student.registration_number || "-"}
                         </TableCell>
                         <TableCell>
-                          {student.guardian_name || student.registration_number || "N/A"}
+                          {student.full_name || student.guardian_name || student.registration_number || "N/A"}
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">
@@ -363,7 +413,7 @@ const StudentsManagement = () => {
                           <div className="flex items-center gap-1">
                             <InviteParentDialog
                               studentId={student.id}
-                              studentName={student.guardian_name || student.registration_number || "Student"}
+                              studentName={student.full_name || student.guardian_name || student.registration_number || "Student"}
                             />
                             <Button
                               variant="ghost"

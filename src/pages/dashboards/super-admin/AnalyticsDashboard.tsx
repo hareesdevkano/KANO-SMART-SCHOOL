@@ -36,7 +36,7 @@ const AnalyticsDashboard = () => {
 
   if (statsLoading) {
     return (
-      <DashboardLayout role="super-admin">
+      <DashboardLayout role="super_admin">
         <div className="flex items-center justify-center py-24">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
         </div>
@@ -45,7 +45,7 @@ const AnalyticsDashboard = () => {
   }
 
   return (
-    <DashboardLayout role="super-admin">
+    <DashboardLayout role="super_admin">
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Platform Analytics</h1>

@@ -30,7 +30,7 @@ const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles && role && !allowedRoles.includes(role)) {
+  if (allowedRoles && (!role || !allowedRoles.includes(role))) {
     // Redirect to user's own dashboard
     const correctPath = rolePathMap[role] || "/";
     return <Navigate to={correctPath} replace />;

@@ -17,35 +17,43 @@ const Navbar = () => {
     { name: "Features", href: "#features" },
     { name: "Institutions", href: "#schools" },
     { name: "How It Works", href: "#how-it-works" },
+    { name: "Live Demo", href: "/demo" },
+    { name: "Schools", href: "/schools" },
     { name: "Results", href: "#check-results" },
-    { name: "Stories", href: "#testimonials" },
   ];
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-luxury-navy-deep/85 backdrop-blur-2xl border-b border-white/[0.06] shadow-luxury"
-          : "bg-transparent"
+          ? "bg-luxury-cream/95 backdrop-blur-xl border-b border-luxury-emerald/10"
+          : "bg-luxury-cream"
       }`}
     >
-      <div className="container mx-auto px-6 lg:px-10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="relative w-11 h-11 rounded-xl bg-luxury-teal flex items-center justify-center shadow-teal-glow transition-transform duration-300 group-hover:scale-105">
-              <span className="font-display font-bold text-xl text-white">S</span>
-              <div className="absolute inset-0 rounded-xl ring-1 ring-luxury-gold/40" />
+          <Link to="/" className="flex items-center gap-3.5 group">
+            <div className="relative w-12 h-12 bg-luxury-emerald flex items-center justify-center overflow-hidden transition-transform duration-500 group-hover:-translate-y-0.5">
+              <span className="font-display italic font-bold text-[1.65rem] leading-none text-luxury-cream translate-y-[1px]">
+                S
+              </span>
+              <span className="absolute inset-[3px] ring-1 ring-luxury-gold/45" />
+              <span className="absolute -bottom-6 -right-6 w-12 h-12 rotate-45 bg-luxury-gold/25" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="font-display text-xl font-bold text-white tracking-tight">
-                Smart<span className="text-luxury-gold">School</span>
+              <span className="font-display text-[1.35rem] italic font-bold text-luxury-emerald tracking-tight">
+                SmartSchool
               </span>
-              <span className="text-[9px] uppercase tracking-[0.25em] text-white/40 font-medium mt-1">
-                Education Platform
+              <span className="flex items-center gap-2 mt-1.5">
+                <span className="h-px w-4 bg-luxury-gold" />
+                <span className="text-[8.5px] uppercase tracking-[0.34em] text-luxury-emerald/55 font-bold">
+                  Education Platform
+                </span>
               </span>
             </div>
           </Link>
+
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-1">
@@ -53,7 +61,7 @@ const Navbar = () => {
               <a
                 key={link.name}
                 href={link.href}
-                className="px-4 py-2 rounded-lg font-medium text-sm text-white/70 hover:text-luxury-gold transition-colors duration-200"
+                className="px-3 py-2 font-medium text-sm text-luxury-emerald/70 hover:text-luxury-emerald transition-colors"
               >
                 {link.name}
               </a>
@@ -66,7 +74,7 @@ const Navbar = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="font-medium text-white/80 hover:text-white hover:bg-white/[0.06] rounded-lg"
+                className="rounded-none font-medium text-luxury-emerald hover:bg-luxury-emerald/5 uppercase tracking-wider text-xs"
               >
                 Sign In
               </Button>
@@ -74,7 +82,7 @@ const Navbar = () => {
             <Link to="/register">
               <Button
                 size="sm"
-                className="font-semibold rounded-lg bg-luxury-gold text-luxury-navy-deep hover:bg-luxury-gold/90 shadow-gold-glow border-0"
+                className="rounded-none font-semibold bg-luxury-emerald text-luxury-cream hover:bg-luxury-emerald/90 border-0 uppercase tracking-wider text-xs px-6"
               >
                 Get Started
               </Button>
@@ -83,36 +91,36 @@ const Navbar = () => {
 
           {/* Mobile toggle */}
           <button
-            className="lg:hidden p-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] transition-colors"
+            className="lg:hidden p-2 rounded-none border border-luxury-emerald/20 hover:bg-luxury-emerald/5"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
-            {isOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
+            {isOpen ? <X className="w-5 h-5 text-luxury-emerald" /> : <Menu className="w-5 h-5 text-luxury-emerald" />}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="lg:hidden py-4 border-t border-white/[0.08] animate-slide-up bg-luxury-navy-deep/95 backdrop-blur-2xl rounded-b-2xl">
-            <div className="flex flex-col gap-1 px-2">
+          <div className="lg:hidden py-4 border-t border-luxury-emerald/10 animate-slide-up">
+            <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className="px-4 py-3 rounded-xl text-white/80 hover:text-luxury-gold hover:bg-white/[0.04] font-medium"
+                  className="px-4 py-3 text-luxury-emerald/80 hover:text-luxury-emerald hover:bg-luxury-emerald/5 font-medium"
                   onClick={() => setIsOpen(false)}
                 >
                   {link.name}
                 </a>
               ))}
-              <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-white/[0.08]">
+              <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-luxury-emerald/10">
                 <Link to="/login" onClick={() => setIsOpen(false)}>
-                  <Button variant="outline" size="lg" className="w-full bg-transparent border-white/20 text-white hover:bg-white/[0.06]">
+                  <Button variant="outline" size="lg" className="w-full rounded-none border-luxury-emerald text-luxury-emerald hover:bg-luxury-emerald hover:text-luxury-cream">
                     Sign In
                   </Button>
                 </Link>
                 <Link to="/register" onClick={() => setIsOpen(false)}>
-                  <Button size="lg" className="w-full bg-luxury-gold text-luxury-navy-deep hover:bg-luxury-gold/90 border-0">
+                  <Button size="lg" className="w-full rounded-none bg-luxury-emerald text-luxury-cream hover:bg-luxury-emerald/90 border-0">
                     Get Started
                   </Button>
                 </Link>

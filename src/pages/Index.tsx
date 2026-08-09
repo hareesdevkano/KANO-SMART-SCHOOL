@@ -8,18 +8,12 @@ import InstitutionsSection from "@/components/landing/InstitutionsSection";
 import TestimonialsSection from "@/components/landing/TestimonialsSection";
 import CTASection from "@/components/landing/CTASection";
 import Footer from "@/components/landing/Footer";
-import { Helmet } from "react-helmet-async";
 
 const Index = () => {
   return (
-    <>
-      <Helmet>
-        <title>SmartSchool - Complete School Management Platform for Nigeria</title>
-        <meta name="description" content="The premium school management platform for Islamiyya, Tahfiz, K-12 and tertiary institutions across Nigeria. Manage students, track Qur'an memorization, process results, and collect fees from one elegant dashboard." />
-        <meta name="keywords" content="school management software Nigeria, Islamiyya school software, Tahfiz school management, Qur'an memorization tracking, student information system, result processing Nigeria" />
-        <link rel="canonical" href="https://smartschool.edu.ng" />
-      </Helmet>
-      <div className="min-h-screen bg-background">
+    <div className="min-h-screen relative">
+      <div className="watermark-layer" aria-hidden="true" />
+      <div className="relative z-10">
         <Navbar />
         <main>
           <HeroSection />
@@ -37,7 +31,7 @@ const Index = () => {
         </main>
         <Footer />
       </div>
-    </>
+    </div>
   );
 };
 

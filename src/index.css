@@ -6,76 +6,77 @@
 
 @layer base {
   :root {
-    /* Primary - Deep Teal (Trust, Education) */
-    --primary: 168 84% 24%;
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 168 76% 36%;
-    --primary-dark: 168 90% 18%;
-    
+    /* Primary - Deep Emerald (Prestige, Education) */
+    --primary: 158 84% 17%;
+    --primary-foreground: 45 55% 94%;
+    --primary-light: 163 70% 27%;
+    --primary-dark: 158 88% 12%;
+
     /* Secondary - Warm Coral (Energy, Action) */
     --secondary: 16 85% 57%;
     --secondary-foreground: 0 0% 100%;
-    
-    /* Accent - Golden Yellow (Success, Achievement) */
-    --accent: 45 93% 47%;
-    --accent-foreground: 0 0% 10%;
-    
+
+    /* Accent - Editorial Gold (Success, Achievement) */
+    --accent: 43 55% 54%;
+    --accent-foreground: 158 84% 12%;
+
     /* Background & Surfaces */
-    --background: 210 20% 98%;
-    --foreground: 220 25% 10%;
-    
+    --background: 45 40% 96%;
+    --foreground: 158 40% 10%;
+
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
-    
+    --card-foreground: 158 40% 10%;
+
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
-    
+    --popover-foreground: 158 40% 10%;
+
     /* Muted */
-    --muted: 210 20% 94%;
-    --muted-foreground: 220 10% 45%;
-    
+    --muted: 45 25% 92%;
+    --muted-foreground: 158 15% 35%;
+
     /* Destructive */
-    --destructive: 0 84% 60%;
+    --destructive: 0 84% 55%;
     --destructive-foreground: 0 0% 100%;
-    
+
     /* Border & Input */
-    --border: 220 13% 90%;
-    --input: 220 13% 90%;
-    --ring: 168 84% 24%;
-    
+    --border: 45 20% 86%;
+    --input: 45 20% 86%;
+    --ring: 43 55% 54%;
+
     --radius: 0.75rem;
-    
+
     /* Sidebar */
-    --sidebar-background: 168 90% 18%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 168 90% 18%;
-    --sidebar-accent: 168 70% 25%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 168 60% 25%;
-    --sidebar-ring: 45 93% 47%;
-    
+    --sidebar-background: 158 84% 12%;
+    --sidebar-foreground: 45 40% 92%;
+    --sidebar-primary: 43 55% 54%;
+    --sidebar-primary-foreground: 158 84% 12%;
+    --sidebar-accent: 158 60% 20%;
+    --sidebar-accent-foreground: 43 60% 65%;
+    --sidebar-border: 43 30% 30%;
+    --sidebar-ring: 43 55% 54%;
+
     /* Custom Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(168 84% 24%) 0%, hsl(168 76% 36%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(168 90% 18%) 0%, hsl(168 84% 24%) 50%, hsl(168 76% 36%) 100%);
-    --gradient-warm: linear-gradient(135deg, hsl(16 85% 57%) 0%, hsl(45 93% 47%) 100%);
-    --gradient-surface: linear-gradient(180deg, hsl(210 20% 98%) 0%, hsl(210 20% 94%) 100%);
-    
+    --gradient-primary: linear-gradient(135deg, hsl(158 84% 17%) 0%, hsl(163 70% 27%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(158 88% 12%) 0%, hsl(158 84% 17%) 50%, hsl(163 70% 27%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(43 55% 54%) 0%, hsl(43 70% 62%) 100%);
+    --gradient-surface: linear-gradient(180deg, hsl(45 40% 96%) 0%, hsl(45 25% 92%) 100%);
+
     /* Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(220 25% 10% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(220 25% 10% / 0.1), 0 2px 4px -2px hsl(220 25% 10% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(220 25% 10% / 0.1), 0 4px 6px -4px hsl(220 25% 10% / 0.1);
-    --shadow-xl: 0 20px 25px -5px hsl(220 25% 10% / 0.1), 0 8px 10px -6px hsl(220 25% 10% / 0.1);
-    --shadow-glow: 0 0 40px hsl(168 84% 24% / 0.3);
-    
+    --shadow-sm: 0 1px 2px 0 hsl(158 40% 10% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(158 40% 10% / 0.1), 0 2px 4px -2px hsl(158 40% 10% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(158 40% 10% / 0.1), 0 4px 6px -4px hsl(158 40% 10% / 0.1);
+    --shadow-xl: 0 20px 25px -5px hsl(158 40% 10% / 0.1), 0 8px 10px -6px hsl(158 40% 10% / 0.1);
+    --shadow-glow: 0 0 40px hsl(158 84% 17% / 0.3);
+
     /* Success/Info/Warning */
-    --success: 142 71% 45%;
+    --success: 158 70% 35%;
     --success-foreground: 0 0% 100%;
     --info: 199 89% 48%;
     --info-foreground: 0 0% 100%;
-    --warning: 45 93% 47%;
-    --warning-foreground: 0 0% 10%;
+    --warning: 43 55% 54%;
+    --warning-foreground: 158 84% 12%;
   }
+
 
   .dark {
     --primary: 168 76% 36%;
@@ -151,61 +152,61 @@
    Forces premium dark theme on all dashboards
    ============================================ */
 .dashboard-shell {
-  --background: 220 35% 7%;
-  --foreground: 40 30% 96%;
+  --background: 158 60% 7%;
+  --foreground: 45 40% 94%;
 
-  --card: 220 30% 11%;
-  --card-foreground: 40 30% 96%;
+  --card: 158 45% 11%;
+  --card-foreground: 45 40% 94%;
 
-  --popover: 220 30% 11%;
-  --popover-foreground: 40 30% 96%;
+  --popover: 158 45% 11%;
+  --popover-foreground: 45 40% 94%;
 
-  --muted: 220 25% 16%;
-  --muted-foreground: 40 12% 70%;
+  --muted: 158 35% 16%;
+  --muted-foreground: 45 15% 70%;
 
-  --primary: 43 74% 55%;            /* gold */
-  --primary-foreground: 220 40% 8%;
-  --primary-light: 43 80% 65%;
-  --primary-dark: 43 70% 45%;
+  --primary: 43 55% 54%;            /* gold */
+  --primary-foreground: 158 84% 10%;
+  --primary-light: 43 65% 62%;
+  --primary-dark: 43 55% 44%;
 
-  --secondary: 207 60% 22%;
-  --secondary-foreground: 40 30% 96%;
+  --secondary: 163 60% 22%;
+  --secondary-foreground: 45 40% 94%;
 
-  --accent: 43 74% 55%;
-  --accent-foreground: 220 40% 8%;
+  --accent: 43 55% 54%;
+  --accent-foreground: 158 84% 10%;
 
-  --border: 40 20% 28% / 0.18;
-  --input: 220 25% 18%;
-  --ring: 43 74% 55%;
+  --border: 43 30% 30% / 0.2;
+  --input: 158 35% 18%;
+  --ring: 43 55% 54%;
 
   --success: 152 60% 48%;
   --info: 199 80% 58%;
   --warning: 38 92% 58%;
   --destructive: 0 72% 58%;
 
-  --sidebar-background: 220 40% 5%;
-  --sidebar-foreground: 40 25% 90%;
-  --sidebar-primary: 43 74% 55%;
-  --sidebar-primary-foreground: 220 40% 8%;
-  --sidebar-accent: 220 35% 12%;
-  --sidebar-accent-foreground: 43 74% 55%;
-  --sidebar-border: 43 30% 25% / 0.2;
-  --sidebar-ring: 43 74% 55%;
+  --sidebar-background: 158 84% 6%;
+  --sidebar-foreground: 45 30% 88%;
+  --sidebar-primary: 43 55% 54%;
+  --sidebar-primary-foreground: 158 84% 10%;
+  --sidebar-accent: 158 55% 12%;
+  --sidebar-accent-foreground: 43 55% 54%;
+  --sidebar-border: 43 30% 25% / 0.22;
+  --sidebar-ring: 43 55% 54%;
 
-  --gradient-primary: linear-gradient(135deg, hsl(43 74% 55%) 0%, hsl(43 80% 65%) 100%);
-  --gradient-hero: linear-gradient(135deg, hsl(220 40% 9%) 0%, hsl(220 35% 14%) 50%, hsl(232 35% 18%) 100%);
+  --gradient-primary: linear-gradient(135deg, hsl(43 55% 54%) 0%, hsl(43 65% 62%) 100%);
+  --gradient-hero: linear-gradient(135deg, hsl(158 84% 9%) 0%, hsl(158 60% 14%) 50%, hsl(163 55% 18%) 100%);
 
   background:
-    radial-gradient(1200px 600px at 0% 0%, hsl(43 74% 55% / 0.06), transparent 60%),
-    radial-gradient(900px 500px at 100% 0%, hsl(207 70% 30% / 0.08), transparent 60%),
-    hsl(220 40% 5%);
+    radial-gradient(1200px 600px at 0% 0%, hsl(43 55% 54% / 0.06), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, hsl(163 70% 22% / 0.14), transparent 60%),
+    hsl(158 84% 5%);
   color: hsl(var(--foreground));
   color-scheme: dark;
 }
 
 .dashboard-shell .glass-card {
-  background: linear-gradient(180deg, hsl(220 30% 12% / 0.85), hsl(220 35% 9% / 0.85));
-  border: 1px solid hsl(43 40% 60% / 0.12);
+  background: linear-gradient(180deg, hsl(158 45% 12% / 0.85), hsl(158 60% 8% / 0.85));
+  border: 1px solid hsl(43 40% 60% / 0.14);
   backdrop-filter: blur(20px);
   box-shadow: 0 1px 0 0 hsl(43 60% 70% / 0.06) inset, 0 20px 40px -20px hsl(0 0% 0% / 0.6);
 }
@@ -216,23 +217,59 @@
 }
 
 @layer utilities {
-  /* Dark Luxury palette tokens */
-  .bg-luxury-navy { background-color: hsl(207 65% 15%); }
-  .bg-luxury-navy-deep { background-color: hsl(207 70% 9%); }
-  .bg-luxury-surface { background-color: hsl(232 30% 14%); }
-  .text-luxury-gold { color: hsl(43 64% 52%); }
-  .text-luxury-teal { color: hsl(180 100% 30%); }
-  .border-luxury-gold { border-color: hsl(43 64% 52%); }
-  .border-luxury-teal { border-color: hsl(180 100% 30%); }
-  .bg-luxury-gold { background-color: hsl(43 64% 52%); }
-  .bg-luxury-teal { background-color: hsl(180 100% 30%); }
-  
-  .bg-gradient-luxury {
-    background: linear-gradient(135deg, hsl(207 70% 9%) 0%, hsl(207 65% 15%) 50%, hsl(232 30% 14%) 100%);
+  /* Emerald Prestige palette — landing (editorial) */
+  /* Deep emerald #064e3b, mid emerald #0d7a5f, gold #c9a84c, cream #f5f0e0 */
+
+  /* Site-wide SmartSchool watermark */
+  .watermark-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    background-color: #f5f0e0;
+    background-image:
+      repeating-linear-gradient(
+        -30deg,
+        transparent 0,
+        transparent 260px,
+        rgba(6, 78, 59, 0.055) 260px,
+        rgba(6, 78, 59, 0.055) 261px,
+        transparent 261px,
+        transparent 520px
+      );
   }
-  
+  .watermark-layer::before,
+  .watermark-layer::after {
+    content: "SmartSchool";
+    position: absolute;
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    color: rgba(6, 78, 59, 0.06);
+    white-space: nowrap;
+    letter-spacing: -0.02em;
+    transform: rotate(-24deg);
+    line-height: 1;
+  }
+  .watermark-layer::before {
+    top: 8%;
+    left: -6%;
+    font-size: clamp(6rem, 14vw, 14rem);
+  }
+  .watermark-layer::after {
+    bottom: 4%;
+    right: -8%;
+    font-size: clamp(6rem, 14vw, 14rem);
+    color: rgba(201, 168, 76, 0.09);
+  }
+
+  .bg-gradient-luxury {
+    background: linear-gradient(135deg, #043528 0%, #064e3b 50%, #0d7a5f 100%);
+  }
+
   .bg-gradient-gold {
-    background: linear-gradient(135deg, hsl(43 64% 52%) 0%, hsl(43 70% 60%) 100%);
+    background: linear-gradient(135deg, #c9a84c 0%, #e0c266 100%);
   }
   
   .text-gold-gradient {

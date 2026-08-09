@@ -115,7 +115,7 @@ const ClassesManagement = () => {
   };
 
   return (
-    <DashboardLayout role="school-admin">
+    <DashboardLayout role="school_admin">
       <div className="space-y-6">
         {/* Header */}
         <div>

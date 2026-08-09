@@ -83,6 +83,7 @@ Deno.serve(async (req) => {
       .from("students")
       .insert({
         school_id: schoolId,
+        full_name,
         registration_number,
         class_id: class_id || null,
         guardian_name,

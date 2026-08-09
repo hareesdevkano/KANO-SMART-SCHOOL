@@ -166,6 +166,11 @@ const Login = () => {
                   Register your school
                 </Link>
               </div>
+              <div className="mt-3 text-center text-sm">
+                <Link to="/demo" className="text-accent-foreground/70 hover:text-primary font-medium underline underline-offset-4 decoration-primary/40">
+                  Or explore the live demo →
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -178,8 +183,8 @@ const Login = () => {
           alt="Students learning in a modern classroom"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(168,90%,18%)]/85 to-[hsl(168,84%,24%)]/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(168,90%,18%)]/60 via-transparent to-[hsl(168,90%,18%)]/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(158,84%,12%)]/90 to-[hsl(163,70%,22%)]/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(158,84%,12%)]/70 via-transparent to-[hsl(158,84%,12%)]/30" />
 
         <div className="relative z-10 flex flex-col justify-center p-12 xl:p-16">
           <h2 className="text-4xl xl:text-5xl font-extrabold text-white mb-6 leading-tight">
