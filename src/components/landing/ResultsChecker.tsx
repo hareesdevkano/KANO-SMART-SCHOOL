@@ -119,7 +119,7 @@ const ResultsChecker = () => {
       schoolLogoUrl: school?.logo_url || undefined,
       schoolEmail: school?.email || undefined,
       schoolPhone: school?.phone || undefined,
-      studentName: `${student.guardian_name || student.registration_number}`,
+      studentName: `${student.full_name || student.guardian_name || student.registration_number}`,
       registrationNumber: student.registration_number,
       className,
       gender: student.gender || undefined,
@@ -293,7 +293,7 @@ const ResultsChecker = () => {
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-white">
-                          {resultData.student.guardian_name || resultData.student.registration_number}
+                          {resultData.student.full_name || resultData.student.guardian_name || resultData.student.registration_number}
                         </h3>
                         <p className="text-sm text-white/50">
                           {resultData.student.registration_number} · {resultData.className}
