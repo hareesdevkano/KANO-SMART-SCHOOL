@@ -192,7 +192,7 @@ export const useTeacherAttendance = (classId?: string, date?: string) => {
         .from("attendance")
         .select(`
           *,
-          students (id, registration_number, guardian_name),
+          students (id, full_name, registration_number, guardian_name),
           classes (id, name)
         `)
         .eq("school_id", schoolId)
@@ -249,6 +249,7 @@ export const useEnrollStudent = () => {
   
   return useMutation({
     mutationFn: async (studentData: {
+      full_name?: string;
       registration_number: string;
       class_id: string;
       guardian_name?: string;
@@ -505,7 +506,7 @@ export const useAssessmentScores = (assessmentId: string | null) => {
         .from("student_scores")
         .select(`
           *,
-          students (id, registration_number, guardian_name)
+          students (id, full_name, registration_number, guardian_name)
         `)
         .eq("assessment_id", assessmentId);
       if (error) throw error;
