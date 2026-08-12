@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,140 +23,15 @@ import {
   ChevronRight,
   FileDown,
 } from "lucide-react";
-import Barcode from "react-barcode";
 import { generateIDCardPDF, generateBulkIDCardsPDF } from "@/utils/generateIDCardPDF";
+import StudentIDCardPreview, { ID_CARD_DESIGNS, type IDCardDesign } from "@/components/students/IDCardDesigns";
+import { getStudentPhotoUrls, imageUrlToDataUrl } from "@/utils/studentPhoto";
 
-const StudentIDCard = ({
-  student,
-  school,
-  cardRef,
-}: {
-  student: any;
-  school: any;
-  cardRef?: React.RefObject<HTMLDivElement>;
-}) => {
-  const currentYear = new Date().getFullYear();
-  const sessionYear = `${currentYear}/${currentYear + 1}`;
-
-  return (
-    <div
-      ref={cardRef}
-      className="w-[360px] h-[228px] rounded-xl overflow-hidden shadow-xl border border-border relative bg-card"
-      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-    >
-      {/* Top accent stripe */}
-      <div className="h-2 w-full bg-gradient-to-r from-[hsl(168,84%,24%)] via-[hsl(168,76%,36%)] to-[hsl(45,93%,47%)]" />
-
-      {/* Header with school info */}
-      <div className="flex items-center gap-2 px-4 pt-2 pb-1.5 bg-[hsl(168,90%,18%)]">
-        {school?.logo_url ? (
-          <img
-            src={school.logo_url}
-            alt="Logo"
-            className="w-9 h-9 rounded-full object-cover border-2 border-white/30 flex-shrink-0"
-          />
-        ) : (
-          <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-            <span className="text-white font-bold text-xs">
-              {school?.name?.charAt(0) || "S"}
-            </span>
-          </div>
-        )}
-        <div className="flex-1 min-w-0">
-          <p className="text-white font-bold text-[11px] leading-tight truncate">
-            {school?.name || "School Name"}
-          </p>
-          <p className="text-white/70 text-[8px] leading-tight truncate">
-            {school?.address ? `${school.address}, ${school.city || ""}, ${school.state || ""}` : "School Address"}
-          </p>
-        </div>
-        <Badge className="bg-[hsl(45,93%,47%)] text-[hsl(0,0%,10%)] text-[7px] px-1.5 py-0 font-bold border-0 flex-shrink-0">
-          STUDENT
-        </Badge>
-      </div>
-
-      {/* Body */}
-      <div className="flex px-4 pt-2 pb-1 gap-3">
-        {/* Photo placeholder */}
-        <div className="flex-shrink-0">
-          <div className="w-[70px] h-[80px] rounded-lg border-2 border-[hsl(168,84%,24%)]/30 bg-muted flex items-center justify-center overflow-hidden">
-            <Users className="w-8 h-8 text-muted-foreground/50" />
-          </div>
-        </div>
-
-        {/* Student details */}
-        <div className="flex-1 min-w-0 space-y-[3px]">
-          <div>
-            <p className="text-[7px] text-muted-foreground uppercase tracking-wider font-semibold">
-              Student Name
-            </p>
-            <p className="text-[11px] font-bold text-foreground leading-tight truncate">
-              {student.guardian_name || "Student Name"}
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-x-2">
-            <div>
-              <p className="text-[7px] text-muted-foreground uppercase tracking-wider font-semibold">
-                Reg. No.
-              </p>
-              <p className="text-[10px] font-semibold text-foreground leading-tight">
-                {student.registration_number || "N/A"}
-              </p>
-            </div>
-            <div>
-              <p className="text-[7px] text-muted-foreground uppercase tracking-wider font-semibold">
-                Class
-              </p>
-              <p className="text-[10px] font-semibold text-foreground leading-tight truncate">
-                {student.classes?.name || "N/A"}
-              </p>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-x-2">
-            <div>
-              <p className="text-[7px] text-muted-foreground uppercase tracking-wider font-semibold">
-                Gender
-              </p>
-              <p className="text-[10px] font-semibold text-foreground leading-tight capitalize">
-                {student.gender || "N/A"}
-              </p>
-            </div>
-            <div>
-              <p className="text-[7px] text-muted-foreground uppercase tracking-wider font-semibold">
-                Session
-              </p>
-              <p className="text-[10px] font-semibold text-foreground leading-tight">
-                {sessionYear}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Barcode Footer */}
-      <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-4 py-1 bg-muted/80 border-t border-border">
-        <Barcode
-          value={student.registration_number || student.id?.slice(0, 12) || "000000"}
-          width={1.2}
-          height={28}
-          fontSize={8}
-          margin={0}
-          displayValue={false}
-          background="transparent"
-        />
-        <div className="text-right">
-          <p className="text-[7px] text-muted-foreground font-medium">
-            Powered by SmartSchool
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const StudentIDCards = () => {
   const [selectedClass, setSelectedClass] = useState<string>("all");
   const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
+  const [design, setDesign] = useState<IDCardDesign>("emerald");
   const cardRef = useRef<HTMLDivElement>(null);
   const { schoolId } = useAuth();
 
@@ -183,6 +58,20 @@ const StudentIDCards = () => {
       ? students
       : students?.filter((s: any) => s.class_id === selectedClass);
 
+  const [photoUrls, setPhotoUrls] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    let active = true;
+    if (!students?.length) return;
+    getStudentPhotoUrls(students as any).then((map) => {
+      if (active) setPhotoUrls(map);
+    });
+    return () => {
+      active = false;
+    };
+  }, [students]);
+
+
   const currentStudent = selectedStudent
     ? filteredStudents?.find((s: any) => s.id === selectedStudent)
     : filteredStudents?.[0];
@@ -203,8 +92,15 @@ const StudentIDCards = () => {
     setSelectedStudent(filteredStudents[newIndex].id);
   };
 
+  const studentDisplayName = (student: any) =>
+    student?.full_name ||
+    student?.profiles?.full_name ||
+    student?.registration_number ||
+    "Unnamed Student";
+
   const getCardData = (student: any) => ({
-    studentName: student.guardian_name || "Student",
+    design,
+    studentName: studentDisplayName(student),
     registrationNumber: student.registration_number || "N/A",
     className: student.classes?.name || "N/A",
     gender: student.gender || "N/A",
@@ -214,16 +110,23 @@ const StudentIDCards = () => {
     schoolLogoUrl: school?.logo_url || undefined,
   });
 
-  const handleDownloadPDF = () => {
-    if (!currentStudent) return;
-    generateIDCardPDF(getCardData(currentStudent));
+  const withPhoto = async (student: any) => {
+    const url = photoUrls[student.id];
+    const dataUrl = url ? await imageUrlToDataUrl(url) : null;
+    return { ...getCardData(student), photoUrl: dataUrl || undefined };
   };
 
-  const handleDownloadAllPDF = () => {
+  const handleDownloadPDF = async () => {
+    if (!currentStudent) return;
+    generateIDCardPDF(await withPhoto(currentStudent));
+  };
+
+  const handleDownloadAllPDF = async () => {
     if (!filteredStudents?.length) return;
-    const allData = filteredStudents.map((s: any) => getCardData(s));
+    const allData = await Promise.all(filteredStudents.map((s: any) => withPhoto(s)));
     generateBulkIDCardsPDF(allData);
   };
+
 
   const printCard = () => {
     const printWindow = window.open("", "_blank");
@@ -310,6 +213,29 @@ const StudentIDCards = () => {
           </CardContent>
         </Card>
 
+        {/* Card Design Selector */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Card Design</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-3">
+            {ID_CARD_DESIGNS.map((d) => (
+              <button
+                key={d.id}
+                onClick={() => setDesign(d.id)}
+                className={`text-left rounded-lg border p-3 transition-colors ${
+                  design === d.id
+                    ? "border-primary bg-primary/5 ring-1 ring-primary/30"
+                    : "border-border hover:bg-muted/50"
+                }`}
+              >
+                <p className="text-sm font-semibold text-foreground">{d.label}</p>
+                <p className="text-xs text-muted-foreground">{d.description}</p>
+              </button>
+            ))}
+          </CardContent>
+        </Card>
+
         {studentsLoading ? (
           <div className="flex justify-center py-16">
             <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary" />
@@ -345,9 +271,19 @@ const StudentIDCards = () => {
               <CardContent className="flex justify-center">
                 {currentStudent && (
                   <div data-id-card>
-                    <StudentIDCard
-                      student={currentStudent}
+                    <StudentIDCardPreview
+                      design={design}
+                      student={{
+                        id: currentStudent.id,
+                        studentName: studentDisplayName(currentStudent),
+                        registration_number: currentStudent.registration_number,
+                        className: currentStudent.classes?.name,
+                        gender: currentStudent.gender,
+                        photoUrl: photoUrls[currentStudent.id],
+
+                      }}
                       school={school}
+                      session={sessionYear}
                       cardRef={cardRef}
                     />
                   </div>
@@ -377,7 +313,7 @@ const StudentIDCards = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-foreground truncate">
-                          {student.guardian_name || "Unnamed Student"}
+                          {studentDisplayName(student)}
                         </p>
                         <p className="text-xs text-muted-foreground">
                           {student.registration_number || "No Reg."} • {student.classes?.name || "N/A"}
