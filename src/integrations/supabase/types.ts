@@ -1319,6 +1319,7 @@ export type Database = {
           guardian_name: string | null
           guardian_phone: string | null
           id: string
+          photo_url: string | null
           registration_number: string | null
           school_id: string
           updated_at: string | null
@@ -1336,6 +1337,7 @@ export type Database = {
           guardian_name?: string | null
           guardian_phone?: string | null
           id?: string
+          photo_url?: string | null
           registration_number?: string | null
           school_id: string
           updated_at?: string | null
@@ -1353,6 +1355,7 @@ export type Database = {
           guardian_name?: string | null
           guardian_phone?: string | null
           id?: string
+          photo_url?: string | null
           registration_number?: string | null
           school_id?: string
           updated_at?: string | null
