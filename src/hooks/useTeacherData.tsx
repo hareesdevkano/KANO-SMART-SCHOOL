@@ -258,6 +258,7 @@ export const useEnrollStudent = () => {
       gender?: string;
       date_of_birth?: string;
       address?: string;
+      photo_url?: string | null;
     }) => {
       const { data, error } = await supabase
         .from("students")
@@ -278,6 +279,48 @@ export const useEnrollStudent = () => {
     },
   });
 };
+
+// Update student details (name, photo, guardian info)
+export const useUpdateStudent = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      ...updates
+    }: {
+      id: string;
+      full_name?: string;
+      registration_number?: string;
+      class_id?: string;
+      guardian_name?: string;
+      guardian_phone?: string;
+      guardian_email?: string;
+      gender?: string;
+      date_of_birth?: string | null;
+      address?: string;
+      photo_url?: string | null;
+    }) => {
+      const { data, error } = await supabase
+        .from("students")
+        .update(updates)
+        .eq("id", id)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["all-students"] });
+      queryClient.invalidateQueries({ queryKey: ["class-students"] });
+      toast.success("Student updated successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to update student: " + error.message);
+    },
+  });
+};
+
 
 // Create assessment mutation
 export const useCreateAssessment = () => {
