@@ -1,6 +1,8 @@
 import jsPDF from "jspdf";
 
-interface IDCardPDFData {
+export type IDCardDesign = "emerald" | "midnight" | "minimal";
+
+export interface IDCardPDFData {
   studentName: string;
   registrationNumber: string;
   className: string;
@@ -10,179 +12,310 @@ interface IDCardPDFData {
   schoolAddress?: string;
   schoolLogoUrl?: string;
   photoUrl?: string;
+  design?: IDCardDesign;
 }
 
-// Draw a single professional ID card on the document at position (x, y)
-const drawIDCard = (doc: jsPDF, data: IDCardPDFData, x: number, y: number, cardW: number, cardH: number) => {
-  // White background with rounded corners
-  doc.setFillColor(255, 255, 255);
-  doc.roundedRect(x, y, cardW, cardH, 2, 2, "F");
+type RGB = [number, number, number];
 
-  // Outer border
-  doc.setDrawColor(13, 110, 80);
-  doc.setLineWidth(0.5);
-  doc.roundedRect(x, y, cardW, cardH, 2, 2, "D");
+interface Theme {
+  bg: RGB;
+  bgSoft: RGB;
+  header: RGB;
+  headerSoft: RGB;
+  accentBar: RGB;
+  gold: RGB;
+  goldLight: RGB;
+  goldDark: RGB;
+  label: RGB;
+  value: RGB;
+  headerText: RGB;
+  footerBg: RGB;
+  frame: RGB;
+  badgeBg: RGB;
+  badgeText: RGB;
+  photoBg: RGB;
+  shadow: RGB;
+}
 
-  // Inner decorative border
-  doc.setDrawColor(13, 110, 80);
-  doc.setLineWidth(0.15);
-  doc.roundedRect(x + 1.2, y + 1.2, cardW - 2.4, cardH - 2.4, 1.5, 1.5, "D");
+const THEMES: Record<IDCardDesign, Theme> = {
+  emerald: {
+    bg: [255, 255, 255],
+    bgSoft: [240, 238, 226],
+    header: [6, 78, 59],
+    headerSoft: [13, 122, 95],
+    accentBar: [13, 110, 80],
+    gold: [201, 168, 76],
+    goldLight: [240, 221, 155],
+    goldDark: [140, 110, 38],
+    label: [104, 112, 108],
+    value: [17, 24, 22],
+    headerText: [253, 251, 244],
+    footerBg: [243, 241, 232],
+    frame: [6, 78, 59],
+    badgeBg: [201, 168, 76],
+    badgeText: [26, 26, 26],
+    photoBg: [240, 238, 228],
+    shadow: [200, 205, 200],
+  },
+  midnight: {
+    bg: [19, 26, 43],
+    bgSoft: [10, 15, 26],
+    header: [10, 15, 26],
+    headerSoft: [27, 35, 56],
+    accentBar: [201, 168, 76],
+    gold: [201, 168, 76],
+    goldLight: [247, 236, 192],
+    goldDark: [141, 111, 38],
+    label: [155, 168, 188],
+    value: [248, 250, 252],
+    headerText: [248, 250, 252],
+    footerBg: [8, 13, 24],
+    frame: [201, 168, 76],
+    badgeBg: [201, 168, 76],
+    badgeText: [17, 24, 39],
+    photoBg: [33, 43, 64],
+    shadow: [6, 9, 17],
+  },
+  minimal: {
+    bg: [254, 253, 248],
+    bgSoft: [235, 231, 216],
+    header: [254, 253, 248],
+    headerSoft: [246, 243, 232],
+    accentBar: [6, 78, 59],
+    gold: [201, 168, 76],
+    goldLight: [240, 221, 155],
+    goldDark: [140, 110, 38],
+    label: [138, 134, 120],
+    value: [22, 30, 28],
+    headerText: [6, 78, 59],
+    footerBg: [246, 243, 232],
+    frame: [206, 200, 182],
+    badgeBg: [6, 78, 59],
+    badgeText: [253, 251, 244],
+    photoBg: [248, 246, 238],
+    shadow: [214, 210, 196],
+  },
+};
 
-  // Top gradient stripe
-  doc.setFillColor(13, 110, 80);
-  doc.rect(x + 1.2, y + 1.2, cardW - 2.4, 1.5, "F");
-  
-  // Gold accent line
-  doc.setFillColor(234, 179, 8);
-  doc.rect(x + 1.2, y + 2.7, cardW - 2.4, 0.5, "F");
+const setFill = (doc: jsPDF, c: RGB) => doc.setFillColor(c[0], c[1], c[2]);
+const setDraw = (doc: jsPDF, c: RGB) => doc.setDrawColor(c[0], c[1], c[2]);
+const setText = (doc: jsPDF, c: RGB) => doc.setTextColor(c[0], c[1], c[2]);
 
-  // Header bar
-  doc.setFillColor(13, 85, 60);
-  doc.rect(x + 1.2, y + 3.2, cardW - 2.4, 11, "F");
+const mix = (a: RGB, b: RGB, t: number): RGB => [
+  Math.round(a[0] + (b[0] - a[0]) * t),
+  Math.round(a[1] + (b[1] - a[1]) * t),
+  Math.round(a[2] + (b[2] - a[2]) * t),
+];
 
-  // School logo circle
-  doc.setFillColor(255, 255, 255);
-  doc.circle(x + 9, y + 8.7, 3.8, "F");
+/** Fakes a gradient by painting thin horizontal bands (jsPDF has no native gradients). */
+const gradientRect = (
+  doc: jsPDF,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  from: RGB,
+  to: RGB,
+  steps = 24
+) => {
+  const bandH = h / steps;
+  for (let i = 0; i < steps; i++) {
+    setFill(doc, mix(from, to, i / (steps - 1)));
+    doc.rect(x, y + i * bandH, w, bandH + 0.05, "F");
+  }
+};
+
+const truncate = (value: string, max: number) =>
+  value && value.length > max ? `${value.substring(0, max - 1)}…` : value || "";
+
+const field = (
+  doc: jsPDF,
+  theme: Theme,
+  label: string,
+  value: string,
+  x: number,
+  y: number,
+  max = 22
+) => {
+  doc.setFontSize(3.2);
+  doc.setFont("helvetica", "bold");
+  setText(doc, theme.label);
+  doc.text(label.toUpperCase(), x, y);
+  doc.setFontSize(5.6);
+  setText(doc, theme.value);
+  doc.text(truncate(value || "N/A", max), x, y + 2.9);
+};
+
+const drawIDCard = (
+  doc: jsPDF,
+  data: IDCardPDFData,
+  x: number,
+  y: number,
+  cardW: number,
+  cardH: number
+) => {
+  const design: IDCardDesign = data.design ?? "emerald";
+  const theme = THEMES[design];
+
+  // Drop shadow for a lifted, 3D feel
+  setFill(doc, theme.shadow);
+  doc.roundedRect(x + 0.7, y + 0.9, cardW, cardH, 2.4, 2.4, "F");
+
+  // Card surface with vertical gradient
+  doc.saveGraphicsState();
+  setFill(doc, theme.bg);
+  doc.roundedRect(x, y, cardW, cardH, 2.4, 2.4, "F");
+  gradientRect(doc, x + 0.35, y + 0.35, cardW - 0.7, cardH - 0.7, theme.bg, theme.bgSoft, 28);
+  doc.restoreGraphicsState();
+
+  setDraw(doc, theme.frame);
+  doc.setLineWidth(0.4);
+  doc.roundedRect(x, y, cardW, cardH, 2.4, 2.4, "D");
+
+  const headerH = design === "minimal" ? 13 : 14.5;
+
+  // Top foil rule
+  gradientRect(doc, x + 0.4, y + 0.4, cardW - 0.8, 1.2, theme.goldLight, theme.goldDark, 6);
+
+  if (design !== "minimal") {
+    gradientRect(doc, x + 0.4, y + 1.6, cardW - 0.8, headerH - 1.2, theme.header, theme.headerSoft, 20);
+    // Bevel highlight + gold separator
+    setFill(doc, theme.goldLight);
+    doc.rect(x + 0.4, y + headerH + 0.4, cardW - 0.8, 0.35, "F");
+    setFill(doc, theme.goldDark);
+    doc.rect(x + 0.4, y + headerH + 0.75, cardW - 0.8, 0.35, "F");
+  } else {
+    setFill(doc, theme.accentBar);
+    doc.rect(x + 0.4, y + headerH + 0.4, cardW - 0.8, 0.3, "F");
+  }
+
+  // Monogram tile (embossed)
+  const monoX = x + 8.5;
+  const monoY = y + headerH / 2 + 1.2;
+  setFill(doc, theme.shadow);
+  doc.rect(monoX - 3.7, monoY - 4.1, 8, 8, "F");
+  if (design === "minimal") {
+    gradientRect(doc, monoX - 4, monoY - 4.4, 8, 8, theme.headerSoft, theme.accentBar, 8);
+    setText(doc, [253, 251, 244]);
+  } else {
+    gradientRect(doc, monoX - 4, monoY - 4.4, 8, 8, theme.goldLight, theme.goldDark, 8);
+    setText(doc, theme.badgeText);
+  }
   doc.setFontSize(8);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(13, 85, 60);
-  doc.text(data.schoolName.charAt(0).toUpperCase(), x + 9, y + 10.2, { align: "center" });
+  doc.text((data.schoolName || "S").charAt(0).toUpperCase(), monoX, monoY + 0.6, {
+    align: "center",
+  });
 
-  // School name
-  doc.setFontSize(6.5);
+  // School name + address
+  doc.setFontSize(6.4);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(255, 255, 255);
-  const schoolNameTrunc = data.schoolName.length > 30 ? data.schoolName.substring(0, 30) + "..." : data.schoolName;
-  doc.text(schoolNameTrunc.toUpperCase(), x + 15, y + 7.5);
-
-  // School address
-  doc.setFontSize(4);
+  setText(doc, theme.headerText);
+  doc.text(truncate(data.schoolName, 34).toUpperCase(), x + 15, y + headerH / 2 - 0.6);
+  doc.setFontSize(3.6);
   doc.setFont("helvetica", "normal");
-  doc.setTextColor(200, 230, 215);
-  const addr = data.schoolAddress || "School Address";
-  const addrTrunc = addr.length > 45 ? addr.substring(0, 45) + "..." : addr;
-  doc.text(addrTrunc, x + 15, y + 10.5);
+  setText(doc, design === "minimal" ? theme.label : theme.gold);
+  doc.text(truncate(data.schoolAddress || "School Address", 52), x + 15, y + headerH / 2 + 2.8);
 
-  // STUDENT ID badge
-  doc.setFillColor(234, 179, 8);
-  doc.roundedRect(x + cardW - 19, y + 5, 16, 5, 1.2, 1.2, "F");
-  doc.setFontSize(4.5);
+  // ID badge
+  gradientRect(doc, x + cardW - 22, y + headerH / 2 - 2.6, 17.5, 5.2, theme.goldLight, theme.goldDark, 6);
+  doc.setFontSize(4.2);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(30, 30, 30);
-  doc.text("STUDENT ID", x + cardW - 11, y + 8.2, { align: "center" });
+  setText(doc, design === "minimal" ? theme.badgeText : [26, 26, 26]);
+  doc.text("STUDENT ID", x + cardW - 13.25, y + headerH / 2 + 0.9, { align: "center" });
 
-  // Decorative side accent
-  doc.setFillColor(13, 110, 80);
-  doc.rect(x + 1.2, y + 14.2, 1, cardH - 22.4, "F");
-
-  // Photo placeholder with professional frame
-  const photoX = x + 5;
-  const photoY = y + 16;
+  // Photo frame (with shadow + optional real photo)
+  const photoX = x + 6;
+  const photoY = y + headerH + 4.5;
   const photoW = 18;
   const photoH = 22;
-  
-  // Photo shadow
-  doc.setFillColor(220, 220, 220);
-  doc.roundedRect(photoX + 0.5, photoY + 0.5, photoW, photoH, 1, 1, "F");
-  
-  // Photo border
-  doc.setFillColor(240, 240, 240);
-  doc.setDrawColor(13, 110, 80);
-  doc.setLineWidth(0.4);
+  setFill(doc, theme.shadow);
+  doc.roundedRect(photoX + 0.5, photoY + 0.6, photoW, photoH, 1, 1, "F");
+  setFill(doc, theme.photoBg);
+  setDraw(doc, theme.accentBar);
+  doc.setLineWidth(0.35);
   doc.roundedRect(photoX, photoY, photoW, photoH, 1, 1, "FD");
-  
-  // Photo icon
-  doc.setFontSize(5);
-  doc.setTextColor(160, 160, 160);
-  doc.text("PHOTO", photoX + photoW / 2, photoY + photoH / 2 + 1, { align: "center" });
 
-  // Student details section
-  const detailX = x + 27;
-  let detailY = y + 17;
+  if (data.photoUrl) {
+    try {
+      const format = data.photoUrl.includes("image/png") ? "PNG" : "JPEG";
+      doc.addImage(data.photoUrl, format, photoX + 0.5, photoY + 0.5, photoW - 1, photoH - 1);
+    } catch {
+      /* fall back to placeholder text below */
+    }
+  } else {
+    doc.setFontSize(4.2);
+    doc.setFont("helvetica", "bold");
+    setText(doc, theme.label);
+    doc.text("PHOTO", photoX + photoW / 2, photoY + photoH / 2 + 1, { align: "center" });
+  }
 
-  // Name field with underline
-  doc.setFontSize(3.5);
+  // Details
+  const detailX = photoX + photoW + 5;
+  const col2X = detailX + 27;
+  let cursorY = photoY + 2;
+
+  doc.setFontSize(3.2);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(100, 100, 100);
-  doc.text("STUDENT NAME", detailX, detailY);
-  detailY += 2.5;
-  doc.setFontSize(6.5);
+  setText(doc, theme.label);
+  doc.text("STUDENT NAME", detailX, cursorY);
+  cursorY += 3.4;
+  doc.setFontSize(7.4);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(20, 20, 20);
-  const nameTrunc = data.studentName.length > 22 ? data.studentName.substring(0, 22) + "..." : data.studentName;
-  doc.text(nameTrunc, detailX, detailY);
-  detailY += 1.5;
-  doc.setDrawColor(13, 110, 80);
-  doc.setLineWidth(0.2);
-  doc.line(detailX, detailY, detailX + 50, detailY);
-  detailY += 3;
+  setText(doc, theme.value);
+  doc.text(truncate(data.studentName || "Student", 26), detailX, cursorY);
+  cursorY += 1.8;
+  gradientRect(doc, detailX, cursorY - 0.2, 50, 0.6, theme.goldLight, theme.goldDark, 4);
+  cursorY += 4.4;
 
-  // Two-column layout
-  const col2X = detailX + 26;
-
-  // Row 1: Reg No & Class
-  doc.setFontSize(3.5);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(100, 100, 100);
-  doc.text("REG. NUMBER", detailX, detailY);
-  doc.text("CLASS", col2X, detailY);
-  detailY += 2.5;
-  doc.setFontSize(5.5);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(20, 20, 20);
-  doc.text(data.registrationNumber || "N/A", detailX, detailY);
-  doc.text(data.className || "N/A", col2X, detailY);
-  detailY += 3.5;
-
-  // Row 2: Gender & Session
-  doc.setFontSize(3.5);
-  doc.setTextColor(100, 100, 100);
-  doc.text("GENDER", detailX, detailY);
-  doc.text("SESSION", col2X, detailY);
-  detailY += 2.5;
-  doc.setFontSize(5.5);
-  doc.setTextColor(20, 20, 20);
-  doc.text(data.gender || "N/A", detailX, detailY);
-  doc.text(data.session || "N/A", col2X, detailY);
-
-  // Bottom decorative bar
-  doc.setFillColor(13, 110, 80);
-  doc.rect(x + 1.2, y + cardH - 7.5, cardW - 2.4, 0.3, "F");
+  field(doc, theme, "Reg. Number", data.registrationNumber, detailX, cursorY, 18);
+  field(doc, theme, "Class", data.className, col2X, cursorY, 16);
+  cursorY += 8;
+  field(doc, theme, "Gender", data.gender, detailX, cursorY, 18);
+  field(doc, theme, "Session", data.session, col2X, cursorY, 16);
 
   // Footer
-  doc.setFillColor(248, 248, 248);
-  doc.rect(x + 1.2, y + cardH - 7.2, cardW - 2.4, 5.8, "F");
+  const footerH = 7;
+  gradientRect(
+    doc,
+    x + 0.4,
+    y + cardH - footerH - 0.4,
+    cardW - 0.8,
+    footerH,
+    theme.bgSoft,
+    theme.footerBg,
+    10
+  );
+  gradientRect(doc, x + 0.4, y + cardH - footerH - 0.9, cardW - 0.8, 0.5, theme.goldLight, theme.goldDark, 4);
 
-  // Gold bottom accent
-  doc.setFillColor(234, 179, 8);
-  doc.rect(x + 1.2, y + cardH - 2.6, cardW - 2.4, 1.2, "F");
-
-  doc.setFontSize(3.5);
+  doc.setFontSize(3.4);
   doc.setFont("helvetica", "italic");
-  doc.setTextColor(120, 120, 120);
-  doc.text("If found, please return to the school address above", x + cardW / 2, y + cardH - 4.5, { align: "center" });
-
-  doc.setFontSize(3.5);
+  setText(doc, theme.label);
+  doc.text("If found, please return to the school address above", x + cardW / 2, y + cardH - 4.4, {
+    align: "center",
+  });
+  doc.setFontSize(3.4);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(13, 110, 80);
-  doc.text("Powered by SmartSchool", x + cardW / 2, y + cardH - 2, { align: "center" });
+  setText(doc, design === "midnight" ? theme.gold : theme.accentBar);
+  doc.text(
+    "Powered by Dual Intelligence ICT Services Kano",
+    x + cardW / 2,
+    y + cardH - 1.8,
+    { align: "center" }
+  );
 };
 
 export const generateIDCardPDF = async (data: IDCardPDFData) => {
-  // Standard credit card size: 85.6mm x 53.98mm
   const cardW = 85.6;
   const cardH = 53.98;
   const doc = new jsPDF("l", "mm", [cardW, cardH]);
-
   drawIDCard(doc, data, 0, 0, cardW, cardH);
-
-  const fileName = `${data.studentName.replace(/\s+/g, "_")}_ID_Card.pdf`;
+  const fileName = `${(data.studentName || "student").replace(/\s+/g, "_")}_ID_Card.pdf`;
   doc.save(fileName);
 };
 
 export const generateBulkIDCardsPDF = async (students: IDCardPDFData[]) => {
   const doc = new jsPDF("p", "mm", "a4");
-  const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const cardW = 85.6;
   const cardH = 53.98;
